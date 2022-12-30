@@ -1,5 +1,6 @@
-# To compile this assembly program on windows:
-# gcc -O3 -o Assignment2.exe Assignment2.s then write Assignment2.exe
+# To compile this assembly program on windows, enter the following two commands into the command prompt:
+# gcc -O3 -o Assignment2.exe Assignment2.s
+# Assignment2.exe
 # After running the program, enter a positive integer and press Enter
 
 .intel_syntax noprefix  # we used the intel syntax
@@ -37,7 +38,7 @@ loop1:
 
    # the following 3 instructions increase r by 1   
    fld qword ptr one              # push 1 to the floating point stack
-   fadd qword ptr r           	   # pop the floating point stack top (1), add it to r and push the result (r+1)
+   fadd qword ptr r               # pop the floating point stack top (1), add it to r and push the result (r+1)
    fstp qword ptr r               # pop the floating point stack top (r+1) into the memory variable r
 
    loop loop1         # ecx -=1 , then goto loop1 only if ecx is not zero
