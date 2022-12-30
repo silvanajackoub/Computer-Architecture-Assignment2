@@ -1,13 +1,8 @@
-# To download gcc on windows:
-# download mingw (and make sure gcc is chosen while installation) from: 
-# mingw-get-setup.exe at the site https://osdn.net/projects/mingw/
-# then append c:\mingw\bin; to the start of the PATH environment variable from control panel
-
 # To compile this assembly program on windows:
-# gcc -O3 -o float.exe float.s
+# gcc -O3 -o Assignment2.exe Assignment2.s then write Assignment2.exe
 # After running the program, enter a positive integer and press Enter
 
-.intel_syntax noprefix  # use the intel syntax, not AT&T syntax. do not prefix registers with %
+.intel_syntax noprefix  # we used the intel syntax
 
 .section .data        # memory variables
 
@@ -31,19 +26,19 @@ _main:                # the label indicating the start of the program
    
    mov ecx, n         # ecx <- n (the number of iterations)
 loop1:
-   # the following 4 instructions increase s by 1/r
+   # the following 6 instructions increase s by 1/(r*r)
    fld qword ptr one            # push 1 to the floating point stack
    fdiv qword ptr r             # pop the floating point stack top (1), divide it over r and push the result (1/r)
-   fdiv qword ptr r             # pop the floating point stack top (1), divide it over r and push the result ((1/r)*(1/r))
+   fdiv qword ptr r             # pop the floating point stack top (1/r), divide it over r and push the result ((1/r)*(1/r))
 
-   fadd qword ptr s             # pop the floating point stack top ((1/r)*(1/r)), add it to s, and push the result (s+=((1/r)*/(1/r))
-   fadd qword ptr r             # pop the floating point stack top (s+(1/r)*(1/r)), add it to r, and push the result (s+=r+((1/r)*(1/r))
+   fadd qword ptr r             # pop the floating point stack top ((1/r)*(1/r)), add it to r, and push the result (r+((1/r)*(1/r))
+   fadd qword ptr s             # pop the floating point stack top (r+(1/r)*(1/r)), add it to s, and push the result (s+r+((1/r)*/(1/r))
    fstp qword ptr s             # pop the floating point stack top (s+r+((1/r)*(1/r)) into the memory variable s
 
    # the following 3 instructions increase r by 1   
-   fld qword ptr r              # push 1 to the floating point stack
-   fadd qword ptr one           # pop the floating point stack top (1), add it to r and push the result (r+1)
-   fstp qword ptr r             # pop the floating point stack top (r+1) into the memory variable r
+   fld qword ptr one              # push 1 to the floating point stack
+   fadd qword ptr r           	   # pop the floating point stack top (1), add it to r and push the result (r+1)
+   fstp qword ptr r               # pop the floating point stack top (r+1) into the memory variable r
 
    loop loop1         # ecx -=1 , then goto loop1 only if ecx is not zero
    
